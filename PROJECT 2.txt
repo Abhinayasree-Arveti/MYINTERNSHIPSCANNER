@@ -1,0 +1,54 @@
+package main;
+import java.util.HashMap;
+import java.util.Map;
+
+public class URLShortener {
+    private Map<String, String> urlMap; // Map to store short URLs and their corresponding long URLs
+
+    public URLShortener() {
+        this.urlMap = new HashMap<>();
+    }
+
+    // Method to generate a short URL using a basic hash function
+    private String generateShortURL(String longURL) {
+        int hashCode = longURL.hashCode(); // Basic hash function
+        String shortURL = Integer.toString(hashCode, 36); // Convert hash code to base36 string
+        return shortURL;
+    }
+
+    // Method to shorten a long URL
+    public String shortenURL(String longURL) {
+        if (urlMap.containsValue(longURL)) {
+            return "Error: Duplicate long URL";
+        }
+        String shortURL = generateShortURL(longURL);
+        urlMap.put(shortURL, longURL);
+        return shortURL;
+    }
+
+    // Method to expand a short URL
+    public String expandURL(String shortURL) {
+        String longURL = urlMap.get(shortURL);
+        if (longURL == null) {
+            return "Error: Invalid short URL";
+        }
+        return longURL;
+    }
+
+    // Method to display all mappings
+    public void displayMappings() {
+        for (Map.Entry<String, String> entry : urlMap.entrySet()) {
+            System.out.println(entry.getKey() + " -> " + entry.getValue());
+        }
+    }
+
+    public static void main(String[] args) {
+        URLShortener urlShortener = new URLShortener();
+        // Example usage
+        String longURL = "https://www.example.com";
+        String shortURL = urlShortener.shortenURL(longURL);
+        System.out.println("Shortened URL: " + shortURL);
+        System.out.println("Expanded URL: " + urlShortener.expandURL(shortURL));
+        urlShortener.displayMappings();
+    }
+}
